@@ -1,6 +1,8 @@
 # Created by pyp2rpm-1.1.1
 %global pypi_name unittest2
+%if 0%{?fedora}
 %global with_python3 1
+%endif
 
 Name:           python-%{pypi_name}
 Version:        0.8.0
@@ -19,7 +21,7 @@ BuildRequires:  python-six
 Requires:       python-setuptools
 Requires:       python-six
 
-%if %{?with_python3}
+%if 0%{?with_python3}
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-six

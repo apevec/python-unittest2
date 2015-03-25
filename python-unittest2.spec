@@ -4,6 +4,12 @@
 %global with_python3 1
 %endif
 
+%if 0%{?rhel} && 0%{?rhel} <= 6
+%{!?__python2: %global __python2 /usr/bin/python2}
+%{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
+%{!?python2_sitearch: %global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%endif
+
 Name:           python-%{pypi_name}
 Version:        0.8.0
 Release:        2%{?dist}
@@ -16,6 +22,10 @@ Patch0:         unittest2-0.8.0-remove-argparse-from-requires.patch
 BuildArch:      noarch
 
 BuildRequires:  python2-devel
+%if 0%{?rhel} == 6
+BuildRequires:  python-argparse
+Requires:       python-argparse
+%endif
 BuildRequires:  python-setuptools
 BuildRequires:  python-six
 Requires:       python-setuptools
@@ -84,7 +94,7 @@ popd
 
 
 %check
-%{__python2} -m unittest2
+%{__python2} -m unittest2.__main__
 
 %if 0%{?with_python3}
 pushd %{py3dir}
